@@ -1,10 +1,11 @@
 const express = require("express");
-const user = require("./routes/users");
+const genre = require("./routes/genre");
 const customer = require("./routes/items");
 const movies = require("./routes/movies");
 const rental = require("./routes/rentals");
 const register = require("./routes/register");
 const auth = require("./routes/auth");
+
 const mongoose = require("mongoose");
 mongoose
   .connect(
@@ -14,7 +15,7 @@ mongoose
   .catch((err) => console.log("could not connect to mongoDb...", err));
 const app = express();
 app.use(express.json());
-app.use("/api/user", user);
+app.use("/api/genre", genre);
 app.use("/api/customer", customer);
 app.use("/api/movies", movies);
 app.use("/api/register", register);

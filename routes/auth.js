@@ -1,7 +1,7 @@
 const _ = require("lodash");
-require("dotenv").config();
+
 const Joi = require("joi");
-const jwt = require("jsonwebtoken");
+
 const bcrypt = require("bcrypt");
 const express = require("express");
 const { Register } = require("../models/register");
@@ -16,7 +16,7 @@ router.post("/login", async (req, res) => {
   if (!user) return res.status(400).send("invalid email or password.");
   const validPassword = bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(400).send("invalid email or password.");
-  const token = jwt.sign({ id: user.id }, process.env.JWT);
+  const token = user.generateAuthToken();
   res.send(token);
 });
 function validate(req) {

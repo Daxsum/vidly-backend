@@ -1,32 +1,35 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-
-const Register = mongoose.model(
-  "Register",
-  new mongoose.Schema({
-    firstName: {
-      type: String,
-      required: true,
-    },
-    lastName: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    confirmPassword: {
-      type: String,
-      required: true,
-    },
-  })
-);
+require("dotenv").config();
+const jwt = require("jsonwebtoken");
+const userSchema = new mongoose.Schema({
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  confirmPassword: {
+    type: String,
+    required: true,
+  },
+});
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign({ id: this.id }, process.env.JWT);
+  return token;
+};
+const Register = mongoose.model("Register", userSchema);
 
 function validate(userData) {
   const schema = Joi.object({
