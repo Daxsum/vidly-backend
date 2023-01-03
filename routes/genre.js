@@ -55,7 +55,7 @@ router.put("/genresUpdate/:id", async (req, res) => {
   }
   res.send(genre);
 });
-//deleteing specfic genre api end-point
+//delete specfic genre api end-point
 router.delete("/genresDelete/:id", [auth, admin], async (req, res) => {
   const genre = await Genre.findByIdAndDelete(req.params.id);
 
