@@ -3,7 +3,13 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const { validate, Register } = require("../models/register");
 const router = express.Router();
-
+const auth = require("../middleware/auth");
+router.get("/me", auth, async (req, res) => {
+  const user = await Register.findById(req.user.id).select(
+    "-password -confirmPassword"
+  );
+  res.send(user);
+});
 router.post("/register", async (req, res) => {
   const result = validate(req.body);
   if (result.error) {

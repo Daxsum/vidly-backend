@@ -1,5 +1,7 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const { Genre, validate } = require("../models/genre");
 //// get all the genres api end-point
 router.get("/genresGet", async (req, res) => {
@@ -18,7 +20,7 @@ router.get("/genreGet/:id", async (req, res) => {
   res.send(genre);
 });
 // add new genre in to the array api end-point
-router.post("/genresAdd", async (req, res) => {
+router.post("/genresAdd", auth, async (req, res) => {
   //validation
   const result = validate(req.body);
   if (result.error) {
@@ -54,7 +56,7 @@ router.put("/genresUpdate/:id", async (req, res) => {
   res.send(genre);
 });
 //deleteing specfic genre api end-point
-router.delete("/genresDelete/:id", async (req, res) => {
+router.delete("/genresDelete/:id", [auth, admin], async (req, res) => {
   const genre = await Genre.findByIdAndDelete(req.params.id);
 
   if (!genre) {
